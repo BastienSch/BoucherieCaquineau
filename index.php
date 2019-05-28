@@ -38,6 +38,7 @@ require 'infoWeb.php';
 			</table>
   		</div>
 	</div>
+	<p><b>*Un fournisseur ne peut être supprimé si il est lié à une commande</b></p>
 </div>
 	
 </body>

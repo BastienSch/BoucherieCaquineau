@@ -18,7 +18,7 @@ if(!empty($_POST) && isset($_POST['username']) && isset($_POST['password'])){
 	function dbConnect()
 	{
 	   try{
-            $db = new PDO('sqlite:/srv/http/database.sqlite');
+            $db = new PDO('sqlite:/srv/http/gestionDB.sqlite');
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(Exception $e) {

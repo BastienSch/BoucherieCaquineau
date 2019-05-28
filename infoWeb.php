@@ -81,10 +81,6 @@ Class InfoWeb
 
     /**
      * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return string
      **/
     public function addMorceau($value)
     {
@@ -94,10 +90,6 @@ Class InfoWeb
     }
     /**
      * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return array
      */
     private function _addMorceau($value)
     {
@@ -114,11 +106,7 @@ Class InfoWeb
     }
 
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Add animal
      **/
     public function addAnimal($value)
     {
@@ -127,11 +115,7 @@ Class InfoWeb
          
     }
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Add animal
      */
     private function _addAnimal($value)
     {
@@ -148,11 +132,7 @@ Class InfoWeb
     }
 
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Add viande
      **/
     public function addViande($value)
     {
@@ -161,11 +141,7 @@ Class InfoWeb
          
     }
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Add viande
      */
     private function _addViande($value)
     {
@@ -183,11 +159,7 @@ Class InfoWeb
     }
 
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Add Fournisseur
      **/
     public function addFournisseur($value)
     {
@@ -196,11 +168,7 @@ Class InfoWeb
          
     }
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Add Fournisseur
      */
     private function _addFournisseur($value)
     {
@@ -223,11 +191,7 @@ Class InfoWeb
     }
 
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Alter Fournisseur
      **/
     public function alterFournisseur($value)
     {
@@ -236,37 +200,38 @@ Class InfoWeb
          
     }
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Alter Fournisseur
      */
     private function _alterFournisseur($value)
     {
         $req = $this->_db->prepare(
-            "INSERT INTO fournisseur (nomEntreprise, rue, ville, tel, mail, CP, idSecteur)
-            VALUES(:nomEntreprise, :rue, :ville, :tel, :mail, :CP, :idSecteur)"
+            "UPDATE fournisseur SET 
+                nomEntreprise = :nomEntreprise,
+                rue = :rue,
+                ville = :ville,
+                tel = :tel,
+                mail = :mail,
+                CP = :CP,
+                idSecteur = :idSecteur
+                WHERE idFournisseur=:idFournisseur"
         );
+
         $req->execute(
             array(
-                'nomEntreprise' => $value['nomEntreprise'],
-                'rue' => $value['rue'],
-                'ville' => $value['ville'],
-                'tel' => $value['tel'],
-                'mail' => $value['mail'],
-                'CP' => $value['CP'],
-                'idSecteur' => $value['idSecteur']
-            )
-        );      
+            'nomEntreprise' => $value['nomEntreprise'],
+            'rue' => $value['rue'],
+            'ville' => $value['ville'],
+            'tel' => $value['tel'],
+            'mail' => $value['mail'],
+            'CP' => $value['CP'],
+            'idSecteur' => $value['idSecteur'],
+            'idFournisseur' => $value['idFournisseur'])
+        );
+        
         
     }
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Add commande
      **/
     public function addCommande($value)
     {
@@ -275,11 +240,7 @@ Class InfoWeb
          
     }
     /**
-     * Add morceau
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Add commande
      */
     private function _addCommande($value)
     {
@@ -327,25 +288,64 @@ Class InfoWeb
     }
 
     /**
-     * Update
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Alter Commande
+     **/
+    public function alterCommande($value)
+    {
+        
+        self::_alterCommande($value);
+         
+    }
+    /**
+     * Alter Commande
+     */
+    private function _alterCommande($value)
+    {
+        $reqCommande = $this->_db->prepare(
+            "UPDATE commande SET 
+                montant = :montant,
+                date=:date,
+                idFournisseur=:idFournisseur
+                WHERE idCommande=:idCommande"
+        );
+
+        $reqCommande->execute(
+            array(
+                'montant' => $value['montant'],
+                'date' => $value['date'],
+                'idFournisseur' => $value['nomEntreprise'],
+                'idCommande' => $value['idCommande']
+            )
+        );  
+
+        $reqAppartenir = $this->_db->prepare(
+            "UPDATE appartenir SET 
+                quantite = :quantite,
+                idViande=:idViande
+                WHERE idCommande=:idCommande"
+        );
+
+        $reqAppartenir->execute(
+            array(
+            'quantite' => $value['quantite'],
+            'idCommande' => $value['idCommande'],
+            'idViande' => $value['viande'])
+        );
+        
+    }
+
+    /**
+     * Delete morceau
      **/
     public function deleteMorceau($value)
     {
-        
+      
         self::_deleteMorceau($value);
          
     }
 
     /**
-     * Pair state update
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Delete morceau
      */
     private function _deleteMorceau($value)
     {
@@ -366,11 +366,7 @@ Class InfoWeb
     }
 
     /**
-     * Update
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Delete fournisseur
      **/
     public function deleteFournisseur($value)
     {
@@ -380,11 +376,7 @@ Class InfoWeb
     }
 
     /**
-     * Pair state update
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Delete fournisseur
      */
     private function _deleteFournisseur($value)
     {
@@ -405,11 +397,7 @@ Class InfoWeb
     }
 
     /**
-     * Update
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Delete animal
      **/
     public function deleteAnimal($value)
     {
@@ -419,11 +407,7 @@ Class InfoWeb
     }
 
     /**
-     * Pair state update
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Delete animal
      */
     private function _deleteAnimal($value)
     {
@@ -443,11 +427,7 @@ Class InfoWeb
         
     }
     /**
-     * Update
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Delete viande
      **/
     public function deleteViande($value)
     {
@@ -457,11 +437,7 @@ Class InfoWeb
     }
 
     /**
-     * Pair state update
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Delete viande
      */
     private function _deleteViande($value)
     {
@@ -480,11 +456,7 @@ Class InfoWeb
     }
 
     /**
-     * Update
-     *
-     * @param Array $value get value 
-     *
-     * @return string
+     * Delete commande
      **/
     public function deleteCommande($value)
     {
@@ -494,11 +466,7 @@ Class InfoWeb
     }
 
     /**
-     * Pair state update
-     *
-     * @param Array $value get value 
-     *
-     * @return array
+     * Delete commande
      */
     private function _deleteCommande($value)
     {
@@ -516,21 +484,18 @@ Class InfoWeb
        $reqCommande = $this->_db->prepare(
             'DELETE FROM commande
             WHERE idCommande = :id
-            AND nomEntreprise = :nomEntreprise'
+            '
         );
         $reqCommande->execute(
             array(
-                'id' => $value['idMorceau'],
-                'nomEntreprise' => $value['nomEntreprise']
+                'id' => $value['idCommande']
             )
         );
         
     }
 
     /**
-     * List of Fournisseur 
-     *
-     * @return array
+     * Select fournisseur
      */
     private function _selectFournisseur()
     {
@@ -550,9 +515,7 @@ Class InfoWeb
     }
 
     /**
-     * List of Fournisseur 
-     *
-     * @return array
+     * Select Departement
      */
     private function _selectDepartement()
     {
@@ -569,9 +532,7 @@ Class InfoWeb
 
 
     /**
-     * List of Fournisseur 
-     *
-     * @return array
+     * Select secteur
      */
     private function _selectSecteur()
     {
@@ -587,9 +548,7 @@ Class InfoWeb
     }
 
     /**
-     * List of share 
-     *
-     * @return array
+     * Select all viandes 
      */
     private function _selectAllViande()
     {
@@ -609,9 +568,7 @@ Class InfoWeb
     }
 
     /**
-     * List of share 
-     *
-     * @return array
+     * Select viande
      */
     private function _selectViande($idViande)
     {
@@ -636,9 +593,7 @@ Class InfoWeb
     }
 
     /**
-     * List of Pair 
-     *
-     * @return array
+     * Select commande
      */
     private function _selectCommande()
     {
@@ -658,9 +613,7 @@ Class InfoWeb
     }
 
     /**
-     * List of new Pair 
-     *
-     * @return array
+     * Select morceau
      */
     private function _selectMorceau()
     {
@@ -675,7 +628,7 @@ Class InfoWeb
     }
 
     /**
-     * List of new Pair 
+     * Select animaux
      *
      * @return array
      */
@@ -692,9 +645,7 @@ Class InfoWeb
     }
 
     /**
-     * Share List
-     *
-     * @return string
+     * Liste des fournisseurs
      **/
     public function fournisseurList()
     {
@@ -711,29 +662,29 @@ Class InfoWeb
             echo "<td>".$ligne['rue']." ".$ligne['ville']." ".$ligne['CP']."</td>";
             echo "<td>".$ligne['tel']."</td>";
             echo "<td>".$ligne['mail']."</td>";
-            echo "<td><a href=\"alterFournisseur.php?alterFournisseur&idFournisseur=".$ligne['idFournisseur']."&nomEntreprise=".$ligne['nomEntreprise']."&libelle=".$ligne['libelle']."&rue=".$ligne['rue']."&ville=".$ligne['ville']."&CP=".$ligne['CP']."&tel=".$ligne['tel']."&mail=".$ligne['mail']."\" class=\"button-alter button\">Modifier </a></td>";
+            echo "<td><a href=\"alterFournisseur.php?idFournisseur=".$ligne['idFournisseur']."&nomEntreprise=".$ligne['nomEntreprise']."&libelle=".$ligne['libelle']."&rue=".$ligne['rue']."&ville=".$ligne['ville']."&CP=".$ligne['CP']."&tel=".$ligne['tel']."&mail=".$ligne['mail']."\" class=\"button-alter button\">Modifier </a></td>";
                 
-
-            echo "<td>
-                            <button onclick=\"document.getElementById('".$ligne['idFournisseur']."').style.display='block'\" >Supprimer</button>
-                            <div id=\"".$ligne['idFournisseur']."\" class=\"modal\">
-                                <div class=\"modal-content\">
-                                    <div class=\"modal-container\">
-                                        <span onclick=\"document.getElementById('".$ligne['idFournisseur']."').style.display='none'\" class=\"display-topright\">&times;</span>
-                                        <h4>Ajouter aux pairs ?</h4>
-                                        <a href=\"infoWeb.php?delFournisseur&idFournisseur=".$ligne['idFournisseur']."&nomEntreprise=".$ligne['nomEntreprise']."\">Valider</a>
+            $del = self::_fournisseurCheck($ligne['idFournisseur']);
+            if ($del===true){
+                echo "<td>
+                                <button onclick=\"document.getElementById('".$ligne['idFournisseur']."').style.display='block'\" >Supprimer</button>
+                                <div id=\"".$ligne['idFournisseur']."\" class=\"modal\">
+                                    <div class=\"modal-content\">
+                                        <div class=\"modal-container\">
+                                            <span onclick=\"document.getElementById('".$ligne['idFournisseur']."').style.display='none'\" class=\"display-topright\">&times;</span>
+                                            <h4>Supprimer ?</h4>
+                                            <a href=\"infoWeb.php?delFournisseur&idFournisseur=".$ligne['idFournisseur']."&nomEntreprise=".$ligne['nomEntreprise']."\">Valider</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>";
+                            </td>";
+            } else {echo "<td></td>";}                
             echo "</tr>";
         }
     }
 
     /**
-     * Share List
-     *
-     * @return string
+     * Liste des commandes
      **/
     public function commandeList()
     {
@@ -751,13 +702,15 @@ Class InfoWeb
             echo "<td>".$viande['libelleAnimal']."</td>";
             echo "<td>".$viande['libelleMorceau']."</td>";
             echo "<td>".$ligne['quantite']."</td>";
+             echo "<td><a href=\"alterCommande.php?idCommande=".$ligne['idCommande']."&nomEntreprise=".$ligne['nomEntreprise']."&montant=".$ligne['montant']."&dateC=".$ligne['dateC']."&libelleAnimal=".$viande['libelleAnimal']."&libelleMorceau=".$viande['libelleMorceau']."&quantite=".$ligne['quantite']."&idViande=".$ligne['idViande']."\" class=\"button-alter button\">Modifier </a></td>";
+                
             echo "<td>
                             <button onclick=\"document.getElementById('".$ligne['idCommande']."').style.display='block'\" >Supprimer</button>
                             <div id=\"".$ligne['idCommande']."\" class=\"modal\">
                                 <div class=\"modal-content\">
                                     <div class=\"modal-container\">
                                         <span onclick=\"document.getElementById('".$ligne['idCommande']."').style.display='none'\" class=\"display-topright\">&times;</span>
-                                        <h4>Ajouter aux pairs ?</h4>
+                                        <h4>Supprimer ?</h4>
                                         <a href=\"infoWeb.php?delCommande&idCommande=".$ligne['idCommande']."&nomEntreprise=".$ligne['nomEntreprise']."\">Valider</a>
                                     </div>
                                 </div>
@@ -767,9 +720,7 @@ Class InfoWeb
         }
     }
     /**
-     * Pair List
-     *
-     * @return string
+     * Liste des viandes
      **/
     public function viandeList()
     {
@@ -783,26 +734,27 @@ Class InfoWeb
             echo "<td>".$ligne['idViande']."</td>";
             echo "<td>".$ligne['libelleAnimal']."</td>";
             echo "<td>".$ligne['libelleMorceau']."</td>";
-            echo "<td>
-                            <button onclick=\"document.getElementById('".$ligne['idViande']."').style.display='block'\" >Supprimer</button>
-                            <div id=\"".$ligne['idViande']."\" class=\"modal\">
-                                <div class=\"modal-content\">
-                                    <div class=\"modal-container\">
-                                        <span onclick=\"document.getElementById('".$ligne['idViande']."').style.display='none'\" class=\"display-topright\">&times;</span>
-                                        <h4>Ajouter aux pairs ?</h4>
-                                        <a href=\"infoWeb.php?delViande&idViande=".$ligne['idViande']."\">Valider</a>
+            $del = self::_viandeCheck($ligne['idViande']);
+            if ($del===true){
+                echo "<td>
+                                <button onclick=\"document.getElementById('".$ligne['idViande']."').style.display='block'\" >Supprimer</button>
+                                <div id=\"".$ligne['idViande']."\" class=\"modal\">
+                                    <div class=\"modal-content\">
+                                        <div class=\"modal-container\">
+                                            <span onclick=\"document.getElementById('".$ligne['idViande']."').style.display='none'\" class=\"display-topright\">&times;</span>
+                                            <h4>Supprimer ?</h4>
+                                            <a href=\"infoWeb.php?delViande&idViande=".$ligne['idViande']."\">Valider</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>";
+                            </td>";
+            } else {echo "<td></td>";}      
             echo "</tr>";
         }
     }
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Liste des animaux
      **/
     public function animauxList()
     {
@@ -815,26 +767,28 @@ Class InfoWeb
             echo "<tr>";
             echo "<td>".$ligne['idAnimal']."</td>";
             echo "<td>".$ligne['libelle']."</td>";
-            echo "<td>
-                            <button onclick=\"document.getElementById('".$ligne['idAnimal']."').style.display='block'\" >Supprimer</button>
-                            <div id=\"".$ligne['idAnimal']."\" class=\"modal\">
-                                <div class=\"modal-content\">
-                                    <div class=\"modal-container\">
-                                        <span onclick=\"document.getElementById('".$ligne['idAnimal']."').style.display='none'\" class=\"display-topright\">&times;</span>
-                                        <h4>Ajouter aux pairs ?</h4>
-                                        <a href=\"infoWeb.php?delAnimal&idAnimal=".$ligne['idAnimal']."&libelle=".$ligne['libelle']."\">Valider</a>
+            $del = self::_animalCheck($ligne['idAnimal']);
+            if ($del===true){
+                echo "<td>
+                                <button onclick=\"document.getElementById('".$ligne['idAnimal']."').style.display='block'\" >Supprimer</button>
+                                <div id=\"".$ligne['idAnimal']."\" class=\"modal\">
+                                    <div class=\"modal-content\">
+                                        <div class=\"modal-container\">
+                                            <span onclick=\"document.getElementById('".$ligne['idAnimal']."').style.display='none'\" class=\"display-topright\">&times;</span>
+                                            <h4>Supprimer ?</h4>
+                                            <a href=\"infoWeb.php?delAnimal&idAnimal=".$ligne['idAnimal']."&libelle=".$ligne['libelle']."\">Valider</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>";
+                            </td>";
+            } else {echo "<td></td>";}
+
             echo "</tr>";
         }
     }
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Select departement
      **/
     public function departementSelect()
     {
@@ -849,6 +803,9 @@ Class InfoWeb
         }
     }
 
+    /**
+     * Select departement
+     **/
     public function departementSelected($get)
     {
         
@@ -867,11 +824,26 @@ Class InfoWeb
         }
     }
 
+    /**
+     * Select secteur
+     **/
+    public function secteurSelected($get)
+    {
+        
+        $data = self::_selectSecteur();
+        
+       
+        foreach ($data as $key => $ligne) {
+            if($ligne['libelle']===$get){
+                    echo "<option selected=\"selected\" value='".$ligne['idSecteur']."'>".$ligne['libelle']."</option>"; 
+            } else {   
+                echo "<option value='".$ligne['idSecteur']."'>".$ligne['libelle']."</option>";
+            }
+        }
+    }
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Select secteur
      **/
     public function secteurSelect()
     {
@@ -880,16 +852,14 @@ Class InfoWeb
         
        
         foreach ($data as $key => $ligne) {
-            
-            echo "<option value='".$ligne['idSecteur']."'>".$ligne['libelle']."</option>";
+
+                echo "<option value='".$ligne['idSecteur']."'>".$ligne['libelle']."</option>";
             
         }
     }
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Select animal
      **/
     public function animalSelect()
     {
@@ -906,9 +876,7 @@ Class InfoWeb
 
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Select morceau
      **/
     public function morceauSelect()
     {
@@ -924,9 +892,7 @@ Class InfoWeb
     }
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Select fournisseur
      **/
     public function fournisseurSelect()
     {
@@ -942,9 +908,24 @@ Class InfoWeb
     }
 
     /**
-     * Pair List
-     *
-     * @return string
+     * Selected fournisseur
+     **/
+    public function fournisseurSelected($get)
+    {
+        
+        $data = self::_selectFournisseur();
+        
+       
+        foreach ($data as $key => $ligne) {
+            if($ligne['nomEntreprise']===$get){
+                    echo "<option selected=\"selected\" value='".$ligne['idFournisseur']."'>".$ligne['nomEntreprise']."</option>"; 
+            } else {   
+                echo "<option value='".$ligne['idFournisseur']."'>".$ligne['nomEntreprise']."</option>";
+            }
+        }
+    }
+    /**
+     * Select viande
      **/
     public function viandeSelect()
     {
@@ -958,23 +939,148 @@ Class InfoWeb
             
         }
     }
+
     /**
-     * Pair List
-     *
-     * @return string
+     * Selected viande
+     **/
+    public function viandeSelected($animal,$morceau)
+    {
+        
+        $data = self::_selectAllViande();
+        
+       
+        foreach ($data as $key => $ligne) {
+            if($ligne['libelleAnimal']===$animal && $ligne['libelleMorceau']===$morceau){
+                    echo "<option selected=\"selected\" value='".$ligne['idViande']."'>".$ligne['libelleAnimal']."".$ligne['libelleMorceau']."</option>"; 
+            } else {   
+                 echo "<option value='".$ligne['idViande']."'>".$ligne['libelleAnimal']." ".$ligne['libelleMorceau']."</option>";
+            }
+        }
+    }
+    /**
+     * Check Animal for delete 
+     */
+    private function _animalCheck($animal)
+    {
+
+        $req = $this->_db->prepare(
+            'SELECT idViande
+            FROM viande 
+            WHERE idAnimal = :idAnimal
+            '
+        );
+        $req->execute(
+            array(
+                'idAnimal' => $animal
+            )
+        );
+        $data = $req->fetch(PDO::FETCH_ASSOC);
+
+        if ($data===false) {
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+    /**
+     * Check Morceau for delete 
+     */
+    private function _morceauCheck($morceau)
+    {
+
+        $req = $this->_db->prepare(
+            'SELECT idViande
+            FROM viande 
+            WHERE idMorceau = :idMorceau
+            '
+        );
+        $req->execute(
+            array(
+                'idMorceau' => $morceau
+            )
+        );
+        $data = $req->fetch(PDO::FETCH_ASSOC);
+
+        if ($data===false) {
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+
+   /**
+     * Check Viande for delete  
+     */
+    private function _viandeCheck($viande)
+    {
+
+        $req = $this->_db->prepare(
+            'SELECT idCommande
+            FROM appartenir 
+            WHERE idViande = :idViande
+            '
+        );
+        $req->execute(
+            array(
+                'idViande' => $viande
+            )
+        );
+        $data = $req->fetch(PDO::FETCH_ASSOC);
+
+        if ($data===false) {
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * Check fournisseur for delete  
+     */
+    private function _fournisseurCheck($fournisseur)
+    {
+
+        $req = $this->_db->prepare(
+            'SELECT idCommande
+            FROM commande 
+            WHERE idFournisseur = :idFournisseur
+            '
+        );
+        $req->execute(
+            array(
+                'idFournisseur' => $fournisseur
+            )
+        );
+        $data = $req->fetch(PDO::FETCH_ASSOC);
+
+        if ($data===false) {
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * morceau List
      **/
     public function morceauList()
     {
         
         $data = self::_selectMorceau();
+
         
-       
         foreach ($data as $key => $ligne) {
-            
+
             echo "<tr>";
             echo "<td>".$ligne['idMorceau']."</td>";
             echo "<td>".$ligne['libelle']."</td>";
-            echo "<td>
+            $del = self::_morceauCheck($ligne['idMorceau']);
+            if ($del===true){
+                echo "<td>
                             <button onclick=\"document.getElementById('".$ligne['idMorceau']."').style.display='block'\" >Supprimer</button>
                             <div id=\"".$ligne['idMorceau']."\" class=\"modal\">
                                 <div class=\"modal-content\">
@@ -986,95 +1092,19 @@ Class InfoWeb
                                 </div>
                             </div>
                         </td>";
+
+            } else {echo "<td></td>";}
+            
             echo "</tr>";
         }
     }
 
-    /**
-     * New Pair List
-     *
-     * @return string
-     **/
-    public function newPairList()
-    {
-        
-        $data = self::_newPairListFromDb();
 
-        foreach ($data as $key => $ligne) {
-
-            echo "<tr>
-                        <td>".$ligne['PC_name']."</td>
-                        <td>".$ligne['Key']."</td>
-                        <td>
-                            <button onclick=\"document.getElementById('".$ligne['Key']."').style.display='block'\" >Ajouter aux pairs</button>
-                            <div id=\"".$ligne['Key']."\" class=\"modal\">
-                                <div class=\"modal-content\">
-                                    <div class=\"modal-container\">
-                                        <span onclick=\"document.getElementById('".$ligne['Key']."').style.display='none'\" class=\"display-topright\">&times;</span>
-                                        <h4>Ajouter aux pairs ?</h4>
-                                        <a href=\"infoWeb.php?addPair&PC_name=".$ligne['PC_name']."&Key=".$ligne['Key']."\">Valider</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>";
-        }
-        echo "
-                </tbody>
-            </table>";
-        if (count($data) === 0) {
-           
-            echo "<p class=\"center\">Aucune nouvelle demande d'ajout.</p>";
-          
-        }
-    }
-
-    /**
-     * Torrent info list
-     *
-     * @return string
-     **/
-    public function torrentList()
-    {
-
-        $data = self::_torrentListFromDb();
-        
-        foreach ($data as $key => $ligne) {
-
-            if ($ligne['statut'] === '0') {
-
-                $statut = "<b class = \"red\">En attente de Pair</b>";
-
-            } else { 
-
-                    $statut = "<b class = \"green\">Sauvegardé</b>";
-
-            }
-
-            echo "<tr>";
-            echo "<td>".$ligne['idTorrent']."</td>";
-            echo "<td><b>".basename($ligne['libelle'], ".torrent")."</b></td>";
-            echo "<td>".self::_convert($ligne['taille'])."</td>";
-            echo "<td>".$statut."</td>";
-            echo "<td>".$ligne['PC_name']."</td>";
-            echo "<td><a href=\"infoWeb.php?getTorrent&libelle=".$ligne['libelle']."\"><i class=\"fas fa-download\"></i></a></td>";
-            echo "</tr>";
-        }
-    }
 }
 
 
 switch(true)
 {
-case isset($_GET['getTorrent']):
-
-
-        $infoWeb = new InfoWeb();
-        echo $infoWeb->sendTorrent($_GET);
-    
-
-    break;
-
 case isset($_GET['delMorceau']):
 
 
@@ -1171,6 +1201,15 @@ case isset($_GET['alterFournisseur']):
         $infoWeb = new InfoWeb();
         echo $infoWeb->alterFournisseur($_GET);
         header('Location: index.php');
+    
+
+    break;
+case isset($_GET['alterCommande']):
+
+
+        $infoWeb = new InfoWeb();
+        echo $infoWeb->alterCommande($_GET);
+        header('Location: listCommande.php');
     
 
     break;

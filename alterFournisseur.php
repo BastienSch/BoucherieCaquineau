@@ -38,11 +38,11 @@ require 'infoWeb.php';
 				  <select name="idSecteur">
 					   <?php 
 					    	$infoWeb = new InfoWeb();
-    						$infoWeb->secteurSelect(); 
+    						$infoWeb->secteurSelected($_GET['libelle']); 
     					?>
 				  </select>
-
-				  <input name="addFournisseur" value="addFournisseur" type="text" hidden>
+				  <input name="idFournisseur" value=<?php echo $_GET['idFournisseur'] ?> type="text" hidden>
+				  <input name="alterFournisseur" value="alterFournisseur" type="text" hidden>
 				  <br><br>
 				  <input type="submit" value="Ajouter">
 			</form>   

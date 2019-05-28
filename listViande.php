@@ -25,7 +25,6 @@ require 'infoWeb.php';
 			            <th>Id</th>
 			            <th>Nom de l'animal</th>
 			            <th>Nom du morceau</th>
-			            <th>Modifier</th>
 			            <th>Supprimer</th>
 			        </tr>	
 			    </thead>
@@ -38,6 +37,7 @@ require 'infoWeb.php';
 			</table>
   		</div>
 	</div>
+	<p><b>*Une viande ne peut être supprimé si il est lié à une commande</b></p>
 </div>	
 </body>
 </html>

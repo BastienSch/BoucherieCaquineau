@@ -22,7 +22,6 @@ require 'infoWeb.php';
 			        <tr>
 			            <th>Id</th>
 			            <th>Nom du morceau</th>
-			            <th>Modifier</th>
 			            <th>Supprimer</th>
 			        </tr>	
 			    </thead>
@@ -35,6 +34,8 @@ require 'infoWeb.php';
 			</table>
   		</div>
 	</div>
+	<p><b>*Un morceau de viande ne peut être supprimé si il est lié à une viande</b></p>
+
 </div>	
 </body>
 </html>
