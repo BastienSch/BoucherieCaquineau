@@ -501,10 +501,12 @@ Class InfoWeb
     {
 
         $req = $this->_db->prepare(
-            'SELECT idFournisseur, nomEntreprise, rue, ville, tel, mail, departement.libelle AS CP, secteurActivite.libelle AS libelle 
+            'SELECT idFournisseur, nomEntreprise, rue, ville.libelle AS ville, tel, mail, departement.libelle AS CP, secteurActivite.libelle AS libelle 
 			FROM fournisseur
 			INNER JOIN secteurActivite
 			ON fournisseur.idSecteur = secteurActivite.idSecteur
+            INNER JOIN ville
+            ON fournisseur.idVille=ville.idVille
             INNER JOIN departement
             ON fournisseur.CP= departement.CP'
         );
@@ -540,6 +542,23 @@ Class InfoWeb
         $req = $this->_db->prepare(
             'SELECT idSecteur, libelle 
             FROM secteurActivite'
+        );
+        $req->execute();
+        $data = $req->fetchAll();
+
+        return $data;
+    }
+
+
+    /**
+     * Select ville
+     */
+    private function _selectVille()
+    {
+
+        $req = $this->_db->prepare(
+            'SELECT idVille, libelle 
+            FROM ville'
         );
         $req->execute();
         $data = $req->fetchAll();
@@ -788,6 +807,25 @@ Class InfoWeb
     }
 
     /**
+     * Liste des villes
+     **/
+    public function villeList()
+    {
+        
+        $data = self::_selectVille();
+        
+       
+        foreach ($data as $key => $ligne) {
+            
+            echo "<tr>";
+            echo "<td>".$ligne['idVille']."</td>";
+            echo "<td>".$ligne['libelle']."</td>";
+
+            echo "</tr>";
+        }
+    }
+
+    /**
      * Select departement
      **/
     public function departementSelect()
@@ -802,6 +840,23 @@ Class InfoWeb
    
         }
     }
+
+    /**
+     * Select departement
+     **/
+    public function villeSelect()
+    {
+        
+        $data = self::_selectVille();
+        
+       
+        foreach ($data as $key => $ligne) {
+            
+               echo "<option value='".$ligne['idVille']."'>".$ligne['libelle']."</option>"; 
+   
+        }
+    }
+
 
     /**
      * Select departement

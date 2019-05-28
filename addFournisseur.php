@@ -22,7 +22,12 @@ require 'infoWeb.php';
 				  Rue :<br>
 				  <input name="rue" type="text" ><br>
 				  Ville :<br>
-				  <input name="ville" type="text" ><br>
+				  <select name="idVille">
+					   <?php 
+					    	$infoWeb = new InfoWeb();
+    						$infoWeb->villeSelect(); 
+    					?>
+				  </select>
 				  Numéro de téléphone :<br>
 				  <input name="tel" type="text" ><br>
 				  Adresse E-mail :<br>
