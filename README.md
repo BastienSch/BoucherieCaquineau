@@ -25,27 +25,7 @@
     -Indiquer le montant total et la date.
   
   
-  
-  REQUETES EFFECTUEES :
-  
-  CREATE TABLE "ville" (
-	"idVille"	INTEGER PRIMARY KEY AUTOINCREMENT,
-	"libelle"	TEXT,
-	"idDepartement"	INTEGER,
-	FOREIGN KEY("idDepartement") REFERENCES "departement"("CP")
-);
 
-ALTER TABLE fournisseur
-ADD  idVille INTEGER,
-FOREIGN KEY("idVille") REFERENCES "ville"("idVille");
-
-INSERT INTO ville (libelle)
-SELECT ville FROM fournisseur;
-
-UPDATE fournisseur
-SET idVille = (SELECT idVille FROM ville WHERE libelle= (SELECT ville FROM fournisseur))
-WHERE ville= (SELECT libelle FROM ville)
-  
   
 
   
